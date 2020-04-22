@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+	<configuration>
+		<settings>
+    		<setting name="logImpl" value="STDOUT_LOGGING"/>
+    		<setting name="mapUnderscoreToCamelCase" value="true"/>
+   			<setting name="defaultStatementTimeout" value="25"/> 
+   			<!-- 查询的字段如果值为空  也将此字段返回 -->
+   			<setting name="callSettersOnNulls" value="true"/>
+   			<!--插入为空时插入空值避免报空指针-->
+			<setting name="jdbcTypeForNull" value="NULL" />
+  		</settings>
+		<!-- <environments default="development">
+			<environment id="development">
+				<transactionManager type="JDBC"/>
+				<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+				</dataSource>
+			</environment>
+		</environments> -->
+	<mappers>
+		<mapper resource="ItemMapper.xml"/>
+	</mappers>
+</configuration>

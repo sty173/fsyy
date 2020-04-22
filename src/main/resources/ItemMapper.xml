@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.ItemMapper">
+ 
+   <insert id="addItems" >
+   		insert into fsmx(pfxm, fs, ksdm, tablename, ksmc, jy, xm, xb, nld, lxdh, myhs, tbsj, zzys, myys, wjzyy, brly, fffs, hbbz, tjbz, zlbz, zw, xz, zwlb, gzcs, qkxh)
+   		select
+   		<foreach collection="list" item="item" separator="union all select">
+  			#{item.title}, #{item.value}, #{item.ksdm}, #{item.tablename}, #{item.ksmc}, #{item.advice},
+  			#{item.username}, #{item.sex}, #{item.ageRange}, #{item.phone}, #{item.nurse},
+  			#{item.tbsj}, #{item.mjDoctor}, #{item.stfDoctor}, #{item.reason}, #{item.address}, #{item.method},
+  		    #{item.hbbz}, #{item.tjbz}, #{item.zlbz}, #{item.zw}, #{item.xz}, #{item.zwlb}, #{item.gzcs}, #{item.qkxh}
+  		</foreach>
+   </insert>
+   
+   <insert id="addTxqk">
+   		insert into kf_txqk(jlxh, ksdm, ksmc, ygxm, tbsj, tablename, tbname, txbz, txqk, dlzh, zy)
+   		values ((select MAX(jlxh) + 1 from kf_txqk), #{ksdm}, #{ksmc}, #{ygxm}, #{tbsj}, #{tablename}, #{tbname}, #{txbz}, #{txqk}, #{dlzh}, #{zy})
+   </insert>
+   
+   <insert id="addLoginFlag">
+   		insert into kf_txqk(jlxh, dlzh) values ((select MAX(jlxh) + 1 from kf_txqk), #{loginId})
+   </insert>
+   
+   <update id="updateTxqk">
+   		update kf_txqk
+   		set ksdm = #{ksdm}, ksmc = #{ksmc}, ygxm = #{ygxm}, tbsj = #{tbsj}, tablename = #{tablename}, 
+   		tbname = #{tbname}, txbz = #{txbz}, txqk = #{txqk}, zy = #{zy}
+   		where dlzh = #{dlzh}
+   </update>
+   
+   <select id="getItemDic" resultType="java.lang.String">
+   
+   		select pfxm from table_1 where tablename = #{tablename}
+   </select>
+   
+   <select id="getDeparts" resultType="java.util.HashMap">
+   		select ksdm, ksmc from gy_ksdm where zfpb = 0 and sjks = #{sjks}
+   		and KSDM not in (215, 216, 414, 25, 217, 218, 104)
+   </select>
+   
+   <select id="getFuncDeparts" resultType="java.util.HashMap">
+   		select ksdm, ksmc from kf_ksdm where bz = #{bz} 
+   </select>
+   
+   <select id="generateLoginId" resultType="java.lang.Integer">
+   		select max(dlzh) + 1 from kf_txqk
+   </select>
+   
+   <select id="getTbName" resultType="java.lang.String">
+   		select xxmc from tb_bmdy where tablename=#{tablename}
+   </select>
+   
+   <select id="getLoginFlag" resultType="java.util.HashMap">
+   		select dlzh from kf_txqk where tbsj is null and dlzh = #{loginId}
+   </select>
+   
+   <select id="getZy" resultType="java.lang.Integer">
+   		 select isnull(dbo.GET_ROOT_KSDM(#{ksdm}), 0)
+   </select>
+   
+</mapper>
